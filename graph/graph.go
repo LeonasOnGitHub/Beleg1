@@ -13,8 +13,8 @@ type Graph interface {
 	AddEdge(nodeId1, nodeId2 string, length float64) //, data interface{})
 
 	// get some generic meta data of the graph:
-	NumVertices() int // number of vertices
-	NumEdges() int    // number of edges
+	NumVertices() int // number of Vertices
+	NumEdges() int    // number of Edges
 	IsDirected() bool // is a directed or undirected graph?
 
 	// some basic algorithms:
@@ -30,7 +30,7 @@ type Graph interface {
 type DirectedGraph interface {
 	Graph
 	Dijkstra(id string) map[string]float64
-	//BellmannFord(id string) ([]float64, bool)
+	//BellmannFord(Id string) ([]float64, bool)
 	//FloydWarshall() ([][]float64, bool) // no negative cycles
 }
 
