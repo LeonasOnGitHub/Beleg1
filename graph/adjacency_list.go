@@ -30,24 +30,24 @@ func (x *AdjacencyList) AddEdge(nodeId1, nodeId2 string, length float64) {
 			//get vertex from nodeId2
 			for _, v2 := range x.Vertices {
 				if nodeId2 == v2.Id {
-					e := Edge{v1, v2, length}
+					e := Edge{v2, v1, length}
 					p := &e
 					x.Edges = append(x.Edges, p)
 					if !x.IsDirected {
-						e := Edge{v2, v1, length}
+						e := Edge{v1, v2, length}
 						p := &e
 						x.Edges = append(x.Edges, p)
 					}
 				}
 			}
-
 		}
 	}
 
 }
 
+var reachableVertices = make(map[string]bool)
+
 func (x *AdjacencyList) DFS(nodeId string) map[string]bool {
-	reachableVertices := make(map[string]bool)
 	reachableVertices[nodeId] = true
 
 	// get Vertex from nodeId
