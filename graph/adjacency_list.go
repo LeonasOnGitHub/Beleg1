@@ -77,13 +77,15 @@ func (x *AdjacencyList) BFS(nodeId string) map[string]int {
 			q.QueUp(v)
 		}
 	}
+	l := reachableVertices[nodeId]
 	for len(q.vertices) > 0 {
 		v := q.dequeue()
 		for _, e := range x.Edges {
 			if e.Tail == v {
 				//checks if edging vertex is in the map, if not adds it
 				if _, exist := reachableVertices[e.Head.Id]; !exist {
-					reachableVertices[e.Head.Id] = reachableVertices[e.Tail.Id] + 1
+					l = reachableVertices[e.Tail.Id] + 1
+					reachableVertices[e.Head.Id] = l
 					q.QueUp(e.Head)
 				}
 			}
@@ -91,6 +93,73 @@ func (x *AdjacencyList) BFS(nodeId string) map[string]int {
 	}
 
 	return reachableVertices
+}
+
+var topoMap = make(map[string]int)
+var curLabel = 0
+
+func (x *AdjacencyList) TopoSort() map[string]int {
+
+	//find a Source Vertex
+	for _, v := range x.Vertices {
+		if x.isSource(v) {
+			curLabel = len(x.DFS(v.Id))
+		}
+	}
+
+	for _, v := range x.Vertices {
+		if _, exist := topoMap[v.Id]; !exist {
+			x.dfs_Topo(v)
+
+		}
+	}
+
+	return topoMap
+}
+
+func (x *AdjacencyList) dfs_Topo(v *Vertex) {
+	topoMap[v.Id] = 0
+	for _, e := range x.Edges {
+		if e.Tail == v {
+			if _, exist := topoMap[e.Head.Id]; !exist {
+				x.dfs_Topo(e.Head)
+			}
+
+		}
+	}
+	topoMap[v.Id] = curLabel
+	curLabel--
+}
+
+// return whether the vertex is a valid source vertex for topo
+func (x *AdjacencyList) isSource(v *Vertex) bool {
+	for _, e := range x.Edges {
+		if e.Head.Id == v.Id {
+			return false
+		}
+	}
+	// so that no vertices which have no connection aren't added to the map
+	for _, e := range x.Edges {
+		if e.Tail.Id == v.Id {
+			return true
+		}
+	}
+	return false
+}
+func (x *AdjacencyList) Dijkstra(id string) map[string]float64 {
+	dijkMap := make(map[string]float64)
+	dijkMap[id] = 0
+
+	for _, e := range x.Edges {
+		if _, exist := dijkMap[e.Tail.Id]; exist {
+			if _, exist := dijkMap[e.Head.Id]; !exist {
+				dijkMap[e.Head.Id] = e.Length + dijkMap[e.Tail.Id]
+			} else if e.Length+dijkMap[e.Tail.Id] < dijkMap[e.Head.Id] {
+				dijkMap[e.Head.Id] = e.Length + dijkMap[e.Tail.Id]
+			}
+		}
+	}
+	return dijkMap
 }
 
 func (x *AdjacencyList) NumVertices() int {

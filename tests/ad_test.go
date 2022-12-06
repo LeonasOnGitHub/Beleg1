@@ -18,19 +18,19 @@ func TestMain(m *testing.M) {
 	alD.AddVertex("C")
 	alD.AddVertex("D")
 	alD.AddVertex("E")
-	alD.AddEdge("A", "B", 1)
+	alD.AddEdge("A", "B", 0.5)
 	alD.AddEdge("A", "C", 1)
-	alD.AddEdge("B", "C", 1)
+	alD.AddEdge("B", "C", 0.4)
 	alD.AddEdge("B", "D", 1)
-	alD.AddEdge("C", "D", 1)
+	alD.AddEdge("C", "D", 0.3)
 
 	alUD.AddVertex("A")
 	alUD.AddVertex("B")
 	alUD.AddVertex("C")
 	alUD.AddVertex("D")
-	alD.AddEdge("A", "B", 1)
-	alD.AddEdge("A", "C", 1)
-	alD.AddEdge("A", "D", 1)
+	alUD.AddEdge("A", "B", 1)
+	alUD.AddEdge("A", "C", 1)
+	alUD.AddEdge("A", "D", 1)
 
 	m.Run()
 }
@@ -58,7 +58,7 @@ func TestDFSDirected(t *testing.T) {
 	dummyArray[2] = "C"
 	dummyArray[3] = "D"
 	if len(dummyArray) != len(resultDFS) {
-		t.Error("The dummyArray is not the same size as the resultArray")
+		t.Error("The dummyArray is not the same size as the resultMap")
 	}
 	for i := 0; i < len(dummyArray); i++ {
 		_, ok := resultDFS[dummyArray[i]]
@@ -75,7 +75,7 @@ func TestDFSUndirected(t *testing.T) {
 	dummyArray[2] = "C"
 	dummyArray[3] = "D"
 	if len(dummyArray) != len(resultDFS) {
-		t.Error("The dummyArray is not the same size as the resultArray")
+		t.Error("The dummyArray is not the same size as the resultMap")
 	}
 	for i := 0; i < len(dummyArray); i++ {
 		_, ok := resultDFS[dummyArray[i]]
@@ -91,13 +91,76 @@ func TestBFSUndirected(t *testing.T) {
 	dummyArray[1] = "B"
 	dummyArray[2] = "C"
 	dummyArray[3] = "D"
+	var dummyArraylenght [4]int
+	dummyArraylenght[0] = 0
+	dummyArraylenght[1] = 1
+	dummyArraylenght[2] = 1
+	dummyArraylenght[3] = 1
 	if len(dummyArray) != len(resultDFS) {
-		t.Error("The dummyArray is not the same size as the resultArray")
+		t.Error("The dummyArray is not the same size as the resultMap")
 	}
 	for i := 0; i < len(dummyArray); i++ {
-		_, ok := resultDFS[dummyArray[i]]
+		v, ok := resultDFS[dummyArray[i]]
 		if !ok {
 			t.Error("The Vertex ", dummyArray[i], " should be in map but isn´t")
+		}
+		if v != dummyArraylenght[i] {
+			t.Error("The Vertex should have the length ", dummyArraylenght[i], " but instead has the length ", v)
+		}
+	}
+}
+func TestBFSDirected(t *testing.T) {
+	resultBFS := alD.BFS("A")
+	var dummyArray [4]string
+	dummyArray[0] = "A"
+	dummyArray[1] = "B"
+	dummyArray[2] = "C"
+	dummyArray[3] = "D"
+	var dummyArrayLenght [4]int
+	dummyArrayLenght[0] = 0
+	dummyArrayLenght[1] = 1
+	dummyArrayLenght[2] = 1
+	dummyArrayLenght[3] = 2
+	if len(dummyArray) != len(resultBFS) {
+		t.Error("The dummyArray is not the same size as the resultMap")
+	}
+	for i := 0; i < len(dummyArray); i++ {
+		v, ok := resultBFS[dummyArray[i]]
+		if !ok {
+			t.Error("The Vertex ", dummyArray[i], " should be in map but isn´t")
+		}
+		if v != dummyArrayLenght[i] {
+			t.Error("The Vertex should have the length ", dummyArrayLenght[i], " but instead has the length ", v)
+		}
+	}
+}
+func TestTopoSort(t *testing.T) {
+	resultTopo := alD.TopoSort()
+	var dummyMapDist = make(map[string]int)
+	dummyMapDist["A"] = 1
+	dummyMapDist["B"] = 2
+	dummyMapDist["C"] = 3
+	dummyMapDist["D"] = 4
+
+	for key, value := range resultTopo {
+
+		if value != dummyMapDist[key] {
+			t.Error("The Vertex ", key, " should have the order", dummyMapDist[key], " but has ", value)
+		}
+	}
+}
+
+func TestDijkstra(t *testing.T) {
+	resultDijk := alD.Dijkstra("A")
+	var dummyMapDist = make(map[string]float64)
+	dummyMapDist["A"] = 0
+	dummyMapDist["B"] = 0.5
+	dummyMapDist["C"] = 0.9
+	dummyMapDist["D"] = 1.2
+
+	for key, value := range resultDijk {
+		if value != dummyMapDist[key] {
+			t.Error("The Vertex ", key, " should have the length", dummyMapDist[key], " but has ", value)
 		}
 	}
 }
