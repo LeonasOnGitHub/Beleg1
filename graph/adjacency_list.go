@@ -1,5 +1,7 @@
 package graph
 
+import "math"
+
 type Vertex struct {
 	Id    string
 	Edges []*Edge
@@ -161,7 +163,30 @@ func (x *AdjacencyList) Dijkstra(id string) map[string]float64 {
 	}
 	return dijkMap
 }
+func (x AdjacencyList) DijkstaHeap(id string) map[string]float64 {
+	dijkMap := make(map[string]float64)
+	h := MakeHeap()
+	var dis float64
+	h.Insert(dis, id)
+	for _, v := range x.Vertices {
+		if v.Id != id {
+			h.Insert(math.Inf(1), v.Id)
+		}
+	}
+	for len(h.tree) > 0 {
+		w := *h.ExtractMin()
+		dijkMap[w.v] = w.d
+		dis = dis + w.d
+		for _, edge := range x.Edges {
+			if edge.Tail.Id == w.v {
+				h.Delete(edge.Head.Id)
+				h.Insert(dis+edge.Length, edge.Head.Id)
+			}
 
+		}
+	}
+	return dijkMap
+}
 func (x *AdjacencyList) NumVertices() int {
 	return len(x.Vertices)
 }

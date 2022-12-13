@@ -17,7 +17,6 @@ func TestMain(m *testing.M) {
 	alD.AddVertex("B")
 	alD.AddVertex("C")
 	alD.AddVertex("D")
-	alD.AddVertex("E")
 	alD.AddEdge("A", "B", 0.5)
 	alD.AddEdge("A", "C", 1)
 	alD.AddEdge("B", "C", 0.4)
