@@ -179,8 +179,11 @@ func (x AdjacencyList) DijkstaHeap(id string) map[string]float64 {
 		dis = dis + w.d
 		for _, edge := range x.Edges {
 			if edge.Tail.Id == w.v {
-				h.Delete(edge.Head.Id)
-				h.Insert(dis+edge.Length, edge.Head.Id)
+				if _, exist := dijkMap[edge.Head.Id]; !exist {
+					h.Delete(edge.Head.Id)
+					h.Insert(dis+edge.Length, edge.Head.Id)
+				}
+
 			}
 
 		}

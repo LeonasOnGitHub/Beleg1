@@ -32,7 +32,6 @@ func (x *Heap) ExtractMin() *Key {
 	minResult := x.tree[0]
 
 	//swap the last and first element and reduce the array
-
 	x.swap(len(x.tree)-1, 0)
 	delete(x.position, x.tree[len(x.tree)-1].v)
 	x.tree = x.tree[:len(x.tree)-1]
@@ -52,9 +51,9 @@ func (x *Heap) Heapify(arr []*Key) {
 func (x Heap) Delete(id string) {
 	//swap the last and first element and reduce the array
 	x.swap(len(x.tree)-1, x.position[id])
-	x.tree = x.tree[:len(x.tree)-1]
-	//delete element from map and reorder
 	delete(x.position, id)
+	x.tree = x.tree[:len(x.tree)-1]
+
 	x.reorder()
 }
 func (x Heap) reorder() {
