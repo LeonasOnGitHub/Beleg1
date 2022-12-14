@@ -22,12 +22,18 @@ type AdjacencyList struct {
 func (x *AdjacencyList) AddVertex(nodeId string) {
 	v := Vertex{nodeId, []*Edge{}}
 	p := &v
+	for _, vertex := range x.Vertices {
+		if nodeId == vertex.Id {
+			return
+		}
+	}
 	x.Vertices = append(x.Vertices, p)
+
 }
 
 func (x *AdjacencyList) AddEdge(nodeId1, nodeId2 string, length float64) {
 	//get vertex from nodeId1
-	for _, v1 := range x.Vertices {
+	for v, v1 := range x.Vertices {
 		if nodeId1 == v1.Id {
 			//get vertex from nodeId2
 			for _, v2 := range x.Vertices {
@@ -35,10 +41,12 @@ func (x *AdjacencyList) AddEdge(nodeId1, nodeId2 string, length float64) {
 					e := Edge{v2, v1, length}
 					p := &e
 					x.Edges = append(x.Edges, p)
+					x.Vertices[v].Edges = append(x.Vertices[v].Edges, p)
 					if !x.IsDirected {
 						e := Edge{v1, v2, length}
 						p := &e
 						x.Edges = append(x.Edges, p)
+						x.Vertices[v].Edges = append(x.Vertices[v].Edges, p)
 					}
 				}
 			}
@@ -163,6 +171,7 @@ func (x *AdjacencyList) Dijkstra(id string) map[string]float64 {
 func (x AdjacencyList) DijkstaHeap(id string) map[string]float64 {
 	dijkMap := make(map[string]float64)
 	h := MakeHeap()
+	visited := make(map[string]bool)
 	h.Insert(0, id)
 	for _, v := range x.Vertices {
 		if v.Id != id {
@@ -171,16 +180,22 @@ func (x AdjacencyList) DijkstaHeap(id string) map[string]float64 {
 	}
 	for len(h.tree) > 0 {
 		w := *h.ExtractMin()
+		visited[w.v] = true
 		dijkMap[w.v] = w.d
-		for _, edge := range x.Edges {
-			if edge.Tail.Id == w.v {
-				if dijkMap[w.v]+edge.Length < h.tree[h.position[edge.Head.Id]].d {
-					h.Delete(edge.Head.Id)
-					h.Insert(dijkMap[w.v]+edge.Length, edge.Head.Id)
+		if w.d != math.Inf(1) {
+			for _, edge := range x.Edges {
+				if edge.Tail.Id == w.v {
+					if len(h.tree) > 0 {
+						if !visited[edge.Head.Id] || dijkMap[w.v]+edge.Length < h.tree[h.position[edge.Head.Id]].d {
+							h.Delete(edge.Head.Id)
+							h.Insert(dijkMap[w.v]+edge.Length, edge.Head.Id)
+						}
+					} else if !visited[edge.Head.Id] || dijkMap[w.v]+edge.Length < dijkMap[edge.Head.Id] {
+						h.Delete(edge.Head.Id)
+						h.Insert(dijkMap[w.v]+edge.Length, edge.Head.Id)
+					}
 				}
-
 			}
-
 		}
 	}
 	return dijkMap

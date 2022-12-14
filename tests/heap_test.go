@@ -20,7 +20,7 @@ func TestDijkstraHeap(t *testing.T) {
 	}
 }
 func TestProblem98Small(t *testing.T) {
-	testGraph := initGraph9("smallTest.txt", t)
+	testGraph := initGraph9("newSmallTest.txt", t)
 	resultDijk := testGraph.DijkstaHeap("1")
 	for s, f := range resultDijk {
 		fmt.Println(s, ": ", f)

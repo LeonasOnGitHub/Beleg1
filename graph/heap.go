@@ -21,10 +21,13 @@ func (x *Heap) Insert(dis float64, node string) {
 	x.position[nextK.v] = len(x.tree) - 1
 	// Swap the new X with his parent until it is in the right spot
 	for i := len(x.tree) - 1; i > 0 && nextX.d < x.tree[i/2-1+i%2].d; i = i/2 - 1 + i%2 {
-		swap := x.tree[i/2-1+i%2]
-		x.tree[i/2-1+i%2] = nextK
-		x.tree[i] = swap
-		x.position[nextK.v] = i
+		x.swap(i/2-1+i%2, i)
+
+		/*	swap := x.tree[i/2-1+i%2]
+			x.tree[i/2-1+i%2] = nextK
+			x.tree[i] = swap
+			x.position[nextK.v] = i
+		*/
 	}
 }
 
