@@ -108,14 +108,12 @@ func (x *AdjacencyList) TopoSort() map[string]int {
 			curLabel = len(x.DFS(v.Id))
 		}
 	}
-
 	for _, v := range x.Vertices {
 		if _, exist := topoMap[v.Id]; !exist {
 			x.dfs_Topo(v)
 
 		}
 	}
-
 	return topoMap
 }
 
@@ -126,7 +124,6 @@ func (x *AdjacencyList) dfs_Topo(v *Vertex) {
 			if _, exist := topoMap[e.Head.Id]; !exist {
 				x.dfs_Topo(e.Head)
 			}
-
 		}
 	}
 	topoMap[v.Id] = curLabel
@@ -166,8 +163,7 @@ func (x *AdjacencyList) Dijkstra(id string) map[string]float64 {
 func (x AdjacencyList) DijkstaHeap(id string) map[string]float64 {
 	dijkMap := make(map[string]float64)
 	h := MakeHeap()
-	var dis float64
-	h.Insert(dis, id)
+	h.Insert(0, id)
 	for _, v := range x.Vertices {
 		if v.Id != id {
 			h.Insert(math.Inf(1), v.Id)
@@ -176,12 +172,11 @@ func (x AdjacencyList) DijkstaHeap(id string) map[string]float64 {
 	for len(h.tree) > 0 {
 		w := *h.ExtractMin()
 		dijkMap[w.v] = w.d
-		dis = dis + w.d
 		for _, edge := range x.Edges {
 			if edge.Tail.Id == w.v {
-				if _, exist := dijkMap[edge.Head.Id]; !exist {
+				if dijkMap[w.v]+edge.Length < h.tree[h.position[edge.Head.Id]].d {
 					h.Delete(edge.Head.Id)
-					h.Insert(dis+edge.Length, edge.Head.Id)
+					h.Insert(dijkMap[w.v]+edge.Length, edge.Head.Id)
 				}
 
 			}

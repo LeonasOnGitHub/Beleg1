@@ -48,7 +48,7 @@ func (x *Heap) Heapify(arr []*Key) {
 		x.Insert(i.d, i.v)
 	}
 }
-func (x Heap) Delete(id string) {
+func (x *Heap) Delete(id string) {
 	//swap the last and first element and reduce the array
 	x.swap(len(x.tree)-1, x.position[id])
 	delete(x.position, id)
