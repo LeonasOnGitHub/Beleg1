@@ -20,16 +20,25 @@ func TestDijkstraHeap(t *testing.T) {
 	}
 }
 func TestProblem98Small(t *testing.T) {
-	testGraph := initGraph9("newSmallTest.txt", t)
+	testGraph := initGraph9("smallTest.txt", t)
 	resultDijk := testGraph.DijkstaHeap("1")
 	for s, f := range resultDijk {
 		fmt.Println(s, ": ", f)
 
 	}
 }
-func TestProblem98SBig(t *testing.T) {
+
+func TestProblem98Big(t *testing.T) {
 	testGraph := initGraph9("bigTest.txt", t)
 	resultDijk := testGraph.DijkstaHeap("1")
+	for s, f := range resultDijk {
+		fmt.Println(s, ": ", f)
+
+	}
+}
+
+func TestDijkstra3(t *testing.T) {
+	resultDijk := alDT.DijkstaHeap("R")
 	for s, f := range resultDijk {
 		fmt.Println(s, ": ", f)
 

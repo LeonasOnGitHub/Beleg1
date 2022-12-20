@@ -10,27 +10,34 @@ var vertices = make([]*graph.Vertex, 0)
 var edges = make([]*graph.Edge, 0)
 var alD = graph.AdjacencyList{Edges: edges, Vertices: vertices, IsDirected: true}
 var alUD = graph.AdjacencyList{Edges: edges, Vertices: vertices, IsDirected: false}
+var alDT = graph.AdjacencyList{Edges: edges, Vertices: vertices, IsDirected: true}
 
 func TestMain(m *testing.M) {
+	/*
+			alD.AddVertex("A")
+			alD.AddVertex("B")
+			alD.AddVertex("C")
+			alD.AddVertex("D")
+			alD.AddEdge("A", "B", 0.5)
+			alD.AddEdge("A", "C", 1)
+			alD.AddEdge("B", "C", 0.4)
+			alD.AddEdge("B", "D", 1)
+			alD.AddEdge("C", "D", 0.3)
 
-	alD.AddVertex("A")
-	alD.AddVertex("B")
-	alD.AddVertex("C")
-	alD.AddVertex("D")
-	alD.AddEdge("A", "B", 0.5)
-	alD.AddEdge("A", "C", 1)
-	alD.AddEdge("B", "C", 0.4)
-	alD.AddEdge("B", "D", 1)
-	alD.AddEdge("C", "D", 0.3)
+				alUD.AddVertex("A")
+				alUD.AddVertex("B")
+				alUD.AddVertex("C")
+				alUD.AddVertex("D")
+				alUD.AddEdge("A", "B", 1)
+				alUD.AddEdge("A", "C", 1)
+				alUD.AddEdge("A", "D", 1)
 
-	alUD.AddVertex("A")
-	alUD.AddVertex("B")
-	alUD.AddVertex("C")
-	alUD.AddVertex("D")
-	alUD.AddEdge("A", "B", 1)
-	alUD.AddEdge("A", "C", 1)
-	alUD.AddEdge("A", "D", 1)
-
+		alDT.AddVertex("L")
+		alDT.AddVertex("R")
+		alDT.AddVertex("M")
+		alDT.AddEdge("L", "M", 1)
+		alDT.AddEdge("R", "M", 2)
+	*/
 	m.Run()
 }
 

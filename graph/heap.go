@@ -1,5 +1,7 @@
 package graph
 
+import "fmt"
+
 type Key struct {
 	d float64 //distance
 	v string  //nodeId
@@ -22,12 +24,6 @@ func (x *Heap) Insert(dis float64, node string) {
 	// Swap the new X with his parent until it is in the right spot
 	for i := len(x.tree) - 1; i > 0 && nextX.d < x.tree[i/2-1+i%2].d; i = i/2 - 1 + i%2 {
 		x.swap(i/2-1+i%2, i)
-
-		/*	swap := x.tree[i/2-1+i%2]
-			x.tree[i/2-1+i%2] = nextK
-			x.tree[i] = swap
-			x.position[nextK.v] = i
-		*/
 	}
 }
 
@@ -52,6 +48,11 @@ func (x *Heap) Heapify(arr []*Key) {
 	}
 }
 func (x *Heap) Delete(id string) {
+	for vvid, poss := range x.position {
+		if vvid != x.tree[poss].v {
+			fmt.Println("poss: ", poss, "vvid: ", vvid, "at: ", len(x.tree), "id: ", id)
+		}
+	}
 	//swap the last and first element and reduce the array
 	x.swap(len(x.tree)-1, x.position[id])
 	delete(x.position, id)
@@ -77,6 +78,7 @@ func (x Heap) reorder() {
 	}
 }
 func (x Heap) swap(to, from int) {
+
 	swapValue := x.tree[to]
 	x.tree[to] = x.tree[from]
 	x.tree[from] = swapValue

@@ -1,6 +1,8 @@
 package graph
 
-import "math"
+import (
+	"math"
+)
 
 var vertex2Id = make(map[string]*Vertex)
 
@@ -31,6 +33,7 @@ func (x *AdjacencyList) AddVertex(nodeId string) {
 	}
 	x.Vertices = append(x.Vertices, p)
 	vertex2Id[nodeId] = p
+
 }
 
 func (x *AdjacencyList) AddEdge(nodeId1, nodeId2 string, length float64) {
@@ -171,32 +174,32 @@ func (x *AdjacencyList) Dijkstra(id string) map[string]float64 {
 	return dijkMap
 }
 func (x AdjacencyList) DijkstaHeap(id string) map[string]float64 {
+
 	dijkMap := make(map[string]float64)
 	h := MakeHeap()
 	visited := make(map[string]bool)
 	h.Insert(0, id)
+	visited[id] = true
 	for _, v := range x.Vertices {
 		if v.Id != id {
+			dijkMap[v.Id] = math.Inf(1)
 			h.Insert(math.Inf(1), v.Id)
 		}
 	}
 	for len(h.tree) > 0 {
 		w := *h.ExtractMin()
-		visited[w.v] = true
-		dijkMap[w.v] = w.d
 		if w.d != math.Inf(1) {
+			visited[w.v] = true
+			dijkMap[w.v] = w.d
 			for _, edge := range vertex2Id[w.v].Edges {
-
-				if len(h.tree) > 0 {
-					if !visited[edge.Head.Id] || dijkMap[w.v]+edge.Length < h.tree[h.position[edge.Head.Id]].d {
+				if edge.Tail.Id == w.v {
+					if !visited[edge.Head.Id] {
 						h.Delete(edge.Head.Id)
-						h.Insert(dijkMap[w.v]+edge.Length, edge.Head.Id)
+						l := math.Min(dijkMap[edge.Head.Id], w.d+edge.Length)
+						dijkMap[edge.Head.Id] = l
+						h.Insert(l, edge.Head.Id)
 					}
-				} else if !visited[edge.Head.Id] || dijkMap[w.v]+edge.Length < dijkMap[edge.Head.Id] {
-					h.Delete(edge.Head.Id)
-					h.Insert(dijkMap[w.v]+edge.Length, edge.Head.Id)
 				}
-
 			}
 		}
 	}
